@@ -1,0 +1,47 @@
+OnMount(() => {
+	deleteOperationsAfter12();
+	WinningsDB = calculateWinningsLoggedDB()
+	OperationsDB = calculateOperationsLoggedDB()
+
+ 	WinningsShouldBe = ((firstDeposit.date() - currentTime) / 8400000)
+ 	OperationsShouldBe = (((firstDeposit.date() - currentTime) % 8400000) / 120000)
+ 	
+ 	let WinningsToInsert = WinningsShouldBe - WinningsDB
+ 	let OperationsToInsert = OperationsShouldBe - OperationsDB
+ 	
+ 	if (WinningsToInsert > 0) {
+ 		GenerateWinnigs(WinningsToInsert)
+ 	}
+ 	if (OperationsToInsert > 0) {
+ 		GenerateOperations(OperationsToInsert)
+ 	}
+
+
+
+
+});
+
+
+
+------
+TODO: Pjesa e Margin nga ora 12 deri tani
+
+te jete thjesht sa ore larg 12-es jena dhe sa % duhet te jete bere deri x moment nga FITIMI TOT I DITES
+
+
+const last12Am = new Date(new Date().setHours(0, 0, 0, 0)).getTime();
+const currentDate = Date.now();
+const timeFromToday = currentDate - last12Am;
+
+const OperationsShouldBe = toFixedNr((timeFromToday % daysInMS) / 120000);
+
+
+dailyPerc = 1.4% up to-> 1.5%
+e marrim psh 1.45
+
+
+
+----------------------
+LOGIC:
+
+- Vetem Bot Winnings do te kene efekt tek DB

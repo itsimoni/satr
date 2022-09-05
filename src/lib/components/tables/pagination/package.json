@@ -1,0 +1,39 @@
+{
+  "name": "@fouita/pagination",
+  "svelte": "src/index.js",
+  "module": "dist/index.mjs",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rollup -c",
+    "prepublishOnly": "npm run build"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "rollup": "^2.0.0",
+    "rollup-plugin-svelte": "^6.0.0",
+    "svelte": "^3.0.0"
+  },
+  "keywords": [
+    "svelte",
+    "tailwind",
+    "fouita",
+    "pagination"
+  ],
+  "files": [
+    "src",
+    "dist"
+  ],
+  "description": "Simple pagination component built with svelte and tailwindcss",
+  "version": "0.0.2",
+  "dependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fouita/svelte-tw-pagination.git"
+  },
+  "author": "fouita",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fouita/svelte-tw-pagination/issues"
+  },
+  "homepage": "https://github.com/fouita/svelte-tw-pagination#readme"
+}

@@ -1,0 +1,33 @@
+import { writable } from "svelte/store";
+
+export const selectedCrypto = writable([
+	{ name: 'BTC-EUR', symbol: "BTC-EUR", current_price: 0, change: 0, primary: true },
+	{ name: 'ETH-EUR', symbol: "ETH-EUR", current_price: 0, change: 0, primary: true },
+	{ name: 'USDT-EUR', symbol: "USDT-EUR", current_price: 0, change: 0, primary: true },
+	{ name: 'XRP-EUR', symbol: "XRP-EUR", current_price: 0, change: 0, primary: true },
+	{ name: 'BCH-EUR', symbol: "BCH-EUR", current_price: 0, change: 0, primary: true },
+	{ name: 'XLM-EUR', symbol: "XLM-EUR", current_price: 0, change: 0, primary: true },
+
+	{ name: 'SOL-EUR', symbol: "SOL-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'APE-EUR', symbol: "APE-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'ADA-EUR', symbol: "ADA-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'DOT-EUR', symbol: "DOT-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'THETA-EUR', symbol: "THETA-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'LTC-EUR', symbol: "LTC-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'CELO-EUR', symbol: "CELO-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'WBTC-EUR', symbol: "WBTC-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'MKR-EUR', symbol: "MKR-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'YFI-EUR', symbol: "YFI-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'LINK-EUR', symbol: "LINK-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'WDGLD-EUR', symbol: "WDGLD-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'ALGO-EUR', symbol: "ALGO-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'SUSHI-EUR', symbol: "SUSHI-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'AAVE-EUR', symbol: "AAVE-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'MATIC-EUR', symbol: "MATIC-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'COMP-EUR', symbol: "COMP-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'ENJ-EUR', symbol: "ENJ-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'RARE-EUR', symbol: "RARE-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'XTZ-EUR', symbol: "XTZ-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'SNX-EUR', symbol: "SNX-USD", current_price: 0, change: 0, primary: false },
+	{ name: 'UMA-EUR', symbol: "UMA-USD", current_price: 0, change: 0, primary: false },
+])

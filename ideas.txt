@@ -1,0 +1,10 @@
+IDE ( per demon arbitrazh)
+
+	--> Te bej popup ku te tregon sa do te fitosh ne 1 dite - 1 jave - 1 muaj - 1 vit ( kari npidh )
+	--> Nqs user regjistrohet nga X vend, ti hapet acc me X gjuhe
+
+
+-	CDO 24 ORE DO UPDATOHET BALANCA E BOTIT - QE TE MOS RRITET PA LIDHJE SHUMA
+
+- NQS SHUMA QE KLIENTI DO KERKOJE PER WITHDRAW DO TE JETE ME E MADHE SE BALANCA
+	-> DO TE DALI ERROR QE E LAJMERON ( SI TE FAQJA PAR E BBE (KOPJO KODIN (QE KE SHKRUJT)))

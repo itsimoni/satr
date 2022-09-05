@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+	.checkbox {
+		@apply h-5 w-5 appearance-none border-[1px] border-borderColor bg-mainbg ring-borderColor 
+		transition delay-75 checked:border checked:border-borderColor checked:bg-secondarybg checked:ring-0
+		checked:hover:bg-secondarybg focus:ring-0 focus:ring-borderColor focus:ring-offset-0 checked:focus:border-borderColor 
+		checked:focus:bg-secondarybg active:bg-mainbg active:ring-mainbg checked:active:bg-mainbg;
+	}
+
+	.textHeading {
+		@apply text-xl font-semibold text-main md:text-3xl lg:text-4xl;
+	}
+
+	.textHeadingNumbers {
+		@apply text-4xl font-semibold text-main md:text-4xl lg:text-5xl;
+	}
+
+	.textHeadingSmall {
+		@apply text-lg font-semibold text-white;
+	}
+
+	.textHeadingSecondarySmall {
+		@apply text-white;
+	}
+
+	.textHeadingNumbersSmall {
+		@apply text-xl font-semibold text-main md:text-2xl lg:text-3xl;
+	}
+
+	.buttonBig {
+		@apply w-full border border-borderColor bg-secondarybg px-3 py-3 text-white hover:bg-secondarybg hover:ring-offset-1 focus:outline-none md:px-4 md:py-3.5 md:text-sm;
+	}
+
+	.buttonBigGain {
+		@apply w-full border border-borderColor bg-gain px-3 py-3 text-white hover:bg-gainHover hover:ring-offset-1 focus:outline-none active:bg-gainActive md:px-4 md:py-3.5 md:text-sm;
+	}
+
+	.buttonBigLoss {
+		@apply w-full border border-borderColor bg-loss px-3 py-3 text-white hover:bg-lossHover  hover:ring-offset-1 focus:outline-none active:bg-lossActive md:px-4 md:py-3.5 md:text-sm;
+	}
+
+	.buttonBigSecondary {
+		@apply w-full border border-borderColor bg-mainbg px-3 py-3 text-white hover:bg-secondarybg   hover:ring-offset-1 focus:outline-none md:px-4 md:py-3.5 md:text-sm;
+	}
+
+	.buttonSmall {
+		@apply block border border-borderColor bg-mainbg py-2 px-4 font-inter text-xs text-white hover:bg-secondarybg active:bg-mainbg;
+	}
+
+	.buttonSmallSecondary {
+		@apply block border border-borderColor bg-secondarybg py-2 px-4 font-inter text-xs text-white hover:bg-mainbg active:bg-secondarybg;
+	}
+
+	.inputInitial {
+		@apply w-full border border-borderColor  bg-mainbg px-2 py-3 text-white outline-none ring-0 transition delay-75 hover:bg-secondarybg  focus:border-borderColor focus:bg-secondarybg focus:ring-0 active:bg-secondarybg md:px-4 md:py-3.5 md:text-sm;
+	}
+
+	.inputError {
+		@apply w-full border border-loss bg-mainbg  px-2 py-3 text-loss  outline-none ring-0 transition delay-75 hover:bg-secondarybg  focus:border-lossActive focus:bg-secondarybg focus:ring-0 active:bg-secondarybg md:px-4 md:py-3.5 md:text-sm;
+	}
+
+	.headingModal {
+		@apply font-semibold lg:text-3xl;
+	}
+
+	.textModal {
+		@apply text-2xl font-semibold lg:text-3xl;
+	}
+
+	.mobileNavLink {
+		@apply text-xl font-bold text-neutral-200 md:text-2xl;
+	}
+
+	.mobileNavSecondary {
+		@apply text-lg  text-neutral-200 md:text-2xl;
+	}
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+	--tw-ring-opacity: 1;
+	--tw-ring-offset-width: 1px;
+	border: 1px solid #e4e5e8;
+	-webkit-box-shadow: 0 0 0px 1000px #e4e5e8 inset;
+	--tw-ring-opacity: 0;
+	--tw-border-opacity: 0;
+	border-color: #e4e5e8;
+	--tw-ring-color: #e4e5e8;
+	box-shadow: 0 0 0px 1000px #131722 inset;
+	transition: background-color 5000s ease-in-out 0s;
+	color: #e4e5e8;
+	-webkit-text-fill-color: #e4e5e8;
+}
+
+.noScroll::-webkit-scrollbar {
+	display: none;
+}
+
+.noScroll {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+
+.topoBg {
+	background-color: #131722;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='199' viewBox='0 0 100 199'%3E%3Cg fill='%23242733' fill-opacity='1'%3E%3Cpath d='M0 199V0h1v1.99L100 199h-1.12L1 4.22V199H0zM100 2h-.12l-1-2H100v2z'%3E%3C/path%3E%3C/g%3E%3C/svg%3E");
+}
+
+html {
+	background-color: #131722;
+}
+
+.textNoSelect {
+	-webkit-user-select: none; /* Safari */
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+/Edge */
+	user-select: none; /* Standard */
+}

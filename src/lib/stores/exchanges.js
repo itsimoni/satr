@@ -1,0 +1,22 @@
+export const exchanges = [
+	'Binance',
+	'Okex',
+	'DigiFinex',
+	'BitForex',
+	'LBank',
+	'Huobi',
+	'HitBTC',
+	'BitMart',
+	'BCEX',
+	'Poloniex',
+	'Kraken',
+	'Bitfinex',
+	'Coinbase',
+	'Bittrex',
+	'Bithumb',
+	'Bitstamp',
+	'Bibox',
+	'KuCoin',
+	'Exmo',
+	'CoinEx'
+]
