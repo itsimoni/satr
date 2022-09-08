@@ -2,7 +2,7 @@
 	import { fade } from "svelte/transition";
 	import PartnersGrid from "$lib/components/arbitrage/PartnersGrid.svelte";
 	import ArbitrageGrid from "$lib/components/arbitrage/ArbitrageGrid.svelte";
-	import { companyName, current, invested, live } from "$lib/stores/store";
+	import { companyName, current, invested, live, userVisibleComment } from "$lib/stores/store";
 	import Modal from "$lib/components/Modal.svelte";
 	import { t, locale, locales } from "$lib/services/i18n";
 	import Particles from "svelte-particles";
@@ -294,6 +294,9 @@
 	<div
 		class="mx-2 mt-20 flex min-h-screen flex-col items-center text-center lg:mx-auto lg:w-11/12 lg:p-4"
 	>
+	{#if $userVisibleComment !== null}
+		<p class="mb-1 opacity-50">{$userVisibleComment}</p>
+	{/if}
 		<p>
 			{$companyName}
 			{$t("cbExplanation")}

@@ -9,6 +9,7 @@ export let userCity = writable("");
 export let userCountry = writable("");
 export let userZipCode = writable("");
 export let userPhoneNumber = writable("");
+export let userVisibleComment = writable("");
 
 export let companyName = writable("CryptoNetic");
 export const companyEmail = writable("mailto:support@cryptonetic.co.uk");
@@ -45,7 +46,7 @@ export const loadUserDetails = async (uuid: any) => {
 	const { data, error } = await supabase
 		.from("UserDetails")
 		.select(
-			"udBalance, udAddress, udCity, udZipCode, udCountry, udMobileNumber, isDemo"
+			"udBalance, udAddress, udCity, udZipCode, udCountry, udMobileNumber, isDemo, udUserVisibleComment"
 		)
 		.eq("uuid", uuid)
 		.single();
@@ -68,4 +69,5 @@ export const loadUserDetails = async (uuid: any) => {
 	userZipCode.set(data.udZipCode);
 	userCountry.set(data.udCountry);
 	userPhoneNumber.set(data.udMobileNumber);
+	userVisibleComment.set(data.udUserVisibleComment);
 };
