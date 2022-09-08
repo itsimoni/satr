@@ -4,7 +4,6 @@
 	import supabase from "$lib/db";
 	import { browser } from "$app/env";
 	import { page, session } from "$app/stores";
-	import { RingLoader } from "svelte-loading-spinners";
 	import Navbar from "$lib/components/Navbar.svelte";
 	import {
 		invested,
@@ -17,11 +16,8 @@
 	import exitDropdowns from "$lib/components/Navbar.svelte";
 	import { user } from "$lib/stores/authStore/authStore";
 	import { widgetReady } from "$lib/stores/widgetReady";
-	import {
-		checkBotWinnings,
-		onStart,
-		regulateBotWinnings,
-	} from "$lib/logic/simplified";
+	import { adminNav } from "$lib/admin/store/adminNav";
+	import { onStart } from "$lib/logic/simplified";
 
 	user.set(supabase.auth.user());
 	let sessionValue: any;
@@ -44,7 +40,9 @@
 	supabase.auth.onAuthStateChange((event, sesh) => {
 		userId = sesh;
 	});
+
 	$: userId = supabase.auth.session();
+
 	$: if (browser && userId == null) {
 		goto($nav.login);
 	} else {
@@ -95,63 +93,43 @@
 		}
 	};
 
-	let addingBotWinnings: any = null;
-
 	onMount(async () => {
 		const userId = supabase.auth.user();
+
+		// setTimeout(async () => {
+		// 	const { data, error } = await supabase
+		// 		.from("Users")
+		// 		.select("uEmail, uFname")
+		// 		.eq("uEmail", userId?.email)
+		// 		.single();
+
+		// 	if (error) {
+		// 		supabase.auth.signOut();
+		// 	}
+		// }, 3000);
 
 		associateUUID();
 		udAssociateUUID();
 		loadUserInfo(userId?.id);
 		loadUserDetails(userId?.id);
-
-		let daysToAdd: any = 0;
-		daysToAdd = await checkBotWinnings(userId?.id);
-		
-		if (daysToAdd > 0) {
-			popupAddingBotWinnings = true;
-			addingBotWinnings = true;
-			addingBotWinnings = await regulateBotWinnings(userId?.id, daysToAdd);
-			if (addingBotWinnings == false) {
-				setTimeout(() => {
-					loadUserInfo(userId?.id);
-					loadUserDetails(userId?.id);
-					popupAddingBotWinnings = false;
-					onStart();
-				}, 3000);
-			}
-		}
-		else {
-			onStart();
-		}
 	});
 
-	$: if ((addingBotWinnings = false)) {
-	}
-
-	let popupAddingBotWinnings = false;
-
+	onStart();
 	setInterval(() => onStart(), 55000);
+	// if (browser) {
+	// 	window.$crisp = [];
+	// 	window.CRISP_WEBSITE_ID = "bccaed33-9835-4f10-96b6-8afd1f3f42ff";
+	// 	(function () {
+	// 		let d = document;
+	// 		let s = d.createElement("script");
+	// 		s.src = "https://client.crisp.chat/l.js";
+	// 		s.async = true;
+	// 		d.getElementsByTagName("head")[0].appendChild(s);
+	// 	})();
+	// }
 </script>
 
-{#if popupAddingBotWinnings}
-	<div
-		class="fixed top-1/2 left-1/2 z-[550] flex h-full w-full -translate-x-1/2 -translate-y-1/2 items-center justify-center bg-mainbg bg-opacity-90 font-inter text-white"
-	>
-		<div
-			class="flex max-w-sm flex-col items-center border border-borderColor bg-mainbg p-6 text-center opacity-100"
-		>
-			<RingLoader size="60" color="#26A67F" unit="px" duration="1s" />
-			<p class="mt-10 font-semibold text-main">Updating</p>
-			<p class="mt-3 text-xs">
-				Please wait while your account is updated.<br />
-				This is not going to take long. Thank you for your patience!
-			</p>
-		</div>
-	</div>
-{/if}
-
-<div class={popupAddingBotWinnings ? "" : ""}>
+<div class="">
 	<Navbar invested={$invested} current={$current} />
 	<slot class="" />
 </div>

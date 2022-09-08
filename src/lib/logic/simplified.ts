@@ -14,7 +14,7 @@ import { GenerateRows, GenerateWinningsRows } from "./generateRows";
 function random(min: number, max: number) {
 	return Math.random() * (max - min) + min;
 }
-export const toFixedNr = (num:any, fixed = 0) => {
+function toFixedNr(num, fixed = 0) {
 	var re = new RegExp("^-?\\d+(?:.\\d{0," + (fixed || -1) + "})?");
 	return num.toString().match(re)[0];
 }
@@ -37,6 +37,7 @@ class DivisionAlgorithm {
 let division = new DivisionAlgorithm();
 let daysInMS = 86400000;
 let operationsWithinADay = 720;
+// ! END
 
 export const checkTradesQuantityInDB = async (
 	currentTimeInUTC: number,
@@ -163,7 +164,6 @@ const loadAllOperations = async (uuid: any) => {
 		.from("TradeHistory")
 		.select()
 		.eq("uuid", uuid)
-		.match({ isDay: false })
 		.order("tId", { ascending: true });
 
 	if (error) {
@@ -202,11 +202,12 @@ const loadAllOperations = async (uuid: any) => {
 };
 // return 0 if no ops
 
-export const loadMostRecentOp = async (uuid: any) => {
+const loadMostRecentOp = async (uuid: any) => {
 	const { data, error } = await supabase
 		.from("TradeHistory")
 		.select()
 		.eq("uuid", uuid)
+		// .match({isDay: true})
 		.order("tId", { ascending: false })
 		.limit(1)
 		.single();
@@ -217,18 +218,39 @@ export const loadMostRecentOp = async (uuid: any) => {
 		return Date.parse(data.tDate);
 	}
 };
+// * END
 
 // ----------------------------------------------------------------------- //
-// rregullon operacionet e thjeshta
 export const onStart = async () => {
 	const user = supabase.auth.user();
+
 	// Misc
 	const last12Am = new Date(new Date().setUTCHours(0, 0, 0, 0)).getTime();
-
 	const currentTimeInUTC = new Date().getTime();
 	const userCreationTime = Date.parse(user?.created_at);
+	// END
 
-	// punojn kto
+	const mostRecentOperation = await loadMostRecentOp(user?.id);
+	if (mostRecentOperation !== 0 && mostRecentOperation !== undefined) {
+		if (mostRecentOperation < last12Am) {
+			await deleteAllRows();
+			const dailyWinPercentageRandomised = await calculateBotWinnings(user?.id);
+			const userBalance = await fetchUserBalance(user?.id);
+			updateUserBalance(user?.id, dailyWinPercentageRandomised, userBalance);
+			const daysToAdd = division.divide(
+				last12Am - mostRecentOperation,
+				daysInMS
+			);
+
+			for (let i = 0; i < daysToAdd; i++) {
+				const dailyWinPercentageRandomised = await calculateBotWinnings(
+					user?.id
+				);
+				const userBalance = await fetchUserBalance(user?.id);
+				updateUserBalance(user?.id, dailyWinPercentageRandomised, userBalance);
+			}
+		}
+	}
 	const operations = await loadAllOperations(user?.id);
 	checkTradesQuantityInDB(
 		currentTimeInUTC,
@@ -237,32 +259,4 @@ export const onStart = async () => {
 		operations.length,
 		operations
 	);
-};
-
-// rregullon botWinnings
-export const checkBotWinnings = async (uuid: any) => {
-	let mostRecentOperation: any = 0;
-	mostRecentOperation = await loadMostRecentOp(uuid);
-	const last12Am = new Date(new Date().setUTCHours(0, 0, 0, 0)).getTime();
-	if (mostRecentOperation !== 0 && mostRecentOperation !== undefined) {
-		// siguron qe ka ardh operacioni
-		if (mostRecentOperation < last12Am) {
-			const daysToAdd = division.divide(
-				last12Am - mostRecentOperation,
-				daysInMS
-			);
-			return daysToAdd + 1;
-		}
-	}
-	return 0;
-};
-
-export const regulateBotWinnings = async (uuid: any, daysToAdd: number) => {
-	await deleteAllRows();
-	for (let i = 0; i < daysToAdd; i++) {
-		const dailyWinPercentageRandomised = await calculateBotWinnings(uuid);
-		const userBalance = await fetchUserBalance(uuid);
-		updateUserBalance(uuid, dailyWinPercentageRandomised, userBalance);
-	}
-	return false;
 };

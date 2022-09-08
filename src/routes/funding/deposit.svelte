@@ -92,7 +92,7 @@
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					username: {companyName},
+					username: $companyName,
 					amount: amountInUsd,
 					fields: ["Email", "Name"],
 					redirect: companyWebsite,

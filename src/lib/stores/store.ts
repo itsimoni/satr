@@ -8,7 +8,7 @@ export let userAddress = writable("");
 export let userCity = writable("");
 export let userCountry = writable("");
 export let userZipCode = writable("");
-export let userPhoneNumber = writable();
+export let userPhoneNumber = writable("");
 
 export let companyName = writable("CryptoNetic");
 export const companyEmail = writable("mailto:support@cryptonetic.co.uk");
