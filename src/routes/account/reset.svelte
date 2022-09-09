@@ -125,7 +125,7 @@
 			<p class="break-words" />
 			<form
 				on:submit|preventDefault={submitReset}
-				class="mt-12 h-full justify-between  text-white"
+				class="mt-12 lg:h-full lg:justify-between text-white"
 				autocomplete="false"
 			>
 				<input type="text" autocomplete="false" class="hidden" />
@@ -280,7 +280,7 @@
 							</div>
 						</div>
 						<div
-							class="absolute bottom-4 my-4  mt-12 inline-flex space-x-4 md:left-4 md:my-0"
+							class="lg:absolute lg:bottom-4 my-4  lg:mt-12 mt-48 inline-flex space-x-4 lg:left-4 md:my-0"
 						>
 							<button type="submit" class="buttonBig px-8"
 								>{$t("continue")}</button

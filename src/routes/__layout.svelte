@@ -10,7 +10,9 @@
 		current,
 		loadUserInfo,
 		loadUserDetails,
-userPhoneNumber,
+		userPhoneNumber,
+userName,
+userSurname,
 	} from "$lib/stores/store";
 	import { afterNavigate, goto } from "$app/navigation";
 	import { nav, pageOpened } from "$lib/stores/nav";
@@ -118,6 +120,38 @@ userPhoneNumber,
 	onStart();
 	setInterval(() => onStart(), 55000);
 
+	let phoneNumber = undefined;
+	let name: any = undefined;
+	let surname: any = undefined;
+	userPhoneNumber.subscribe((nr) => {
+		if (nr !== "") {
+			phoneNumber = nr;
+			if (browser) {
+				window.$crisp.push(["set", "user:phone", [phoneNumber]]);
+			}
+		}
+	});
+
+		userSurname.subscribe((s) => {
+		if (s !== "") {
+			surname = s;
+			if (browser && name !== undefined) {
+				window.$crisp.push(["set", "user:nickname", [`${name} ${surname}`]]);
+			}
+		}
+	});
+
+
+	userName.subscribe((n) => {
+		if (n !== "") {
+			name = n;
+			if (browser && surname !== undefined) {
+				window.$crisp.push(["set", "user:nickname", [`${name} ${surname}`]]);
+			}
+		}
+	});
+
+
 	if (browser) {
 		window.$crisp = [];
 		window.CRISP_WEBSITE_ID = "bccaed33-9835-4f10-96b6-8afd1f3f42ff";
@@ -129,7 +163,6 @@ userPhoneNumber,
 			d.getElementsByTagName("head")[0].appendChild(s);
 		})();
 		window.$crisp.push(["set", "user:email", [supabase.auth.user()?.email]]);
-		window.$crisp.push(["set", "user:phone", [$userPhoneNumber]]);
 	}
 </script>
 
