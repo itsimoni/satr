@@ -165,11 +165,12 @@
 					</p>
 				</div>
 			</div>
-			<div class="mt-8 text-center lg:space-y-4 ">
+			<div class="mt-8 text-center lg:space-y-4 space-y-2">
 				<a href="/" rel="_external" class="buttonBig hidden px-8 lg:block"
 					>Return to homepage</a
 				>
 				<a href={$nav.bot} class=" buttonBigGain block">Invest Now</a>
+				<a href={$nav.reset} class="buttonBig block lg:hidden">Change Password</a>
 			</div>
 		</div>
 		<div class="w-full text-sm">

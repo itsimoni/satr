@@ -294,7 +294,7 @@
 	<div
 		class="mx-2 mt-20 flex min-h-screen flex-col items-center text-center lg:mx-auto lg:w-11/12 lg:p-4"
 	>
-	{#if $userVisibleComment !== null}
+	{#if $userVisibleComment !== null && $userVisibleComment !== undefined}
 		<p class="mb-1 opacity-50">{$userVisibleComment}</p>
 	{/if}
 		<p>
