@@ -83,8 +83,8 @@ devDependencies:
     specifier: ^0.1.5
     version: 0.1.12
   svelte-outclick:
-    specifier: ^3.1.0
-    version: 3.7.1(svelte@3.59.2)
+    specifier: ^2.6.5
+    version: 2.6.5
   svelte-preprocess:
     specifier: ^4.10.1
     version: 4.10.7(postcss@8.5.4)(svelte@3.59.2)(typescript@4.6.4)
@@ -2977,12 +2977,8 @@ packages:
     resolution: {integrity: sha512-EKCId1DjVL2RSUVJJsvtNcqQHox03XIgh4xh/4p7r6ST7d8mut6INY9/LqK4A17PFU64+3quZmqiSfOlf480CA==}
     dev: false
 
-  /svelte-outclick@3.7.1(svelte@3.59.2):
-    resolution: {integrity: sha512-+TmDaG8yX4cIhmvflujvgV+NbFHxkUdYfeSczp67UJvkkMO9m6x1ugBQSDnjHD6J1z4tE5alkp5pC5LpoNqOKg==}
-    peerDependencies:
-      svelte: '>= 4.2.12'
-    dependencies:
-      svelte: 3.59.2
+  /svelte-outclick@2.6.5:
+    resolution: {integrity: sha512-yOPcgzoXBH/cVpg8eV2IfkircdYpzDEN3m05qca6AgMTxQjqf8JMv0tgjfIncNgTzXwnl3FrnzYPaOzIg7uxGQ==}
     dev: true
 
   /svelte-particles@2.12.0(svelte@3.59.2):
