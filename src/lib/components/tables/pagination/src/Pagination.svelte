@@ -1,7 +1,7 @@
 <script>
   import ChevronLeftIcon from "./ChevronLeft.svelte";
   import ChevronRightIcon from "./ChevronRight.svelte";
-  import { createEventDispatcher } from "svelte/internal";
+  import { createEventDispatcher } from "svelte";
 
   const dispatch = createEventDispatcher();
 
