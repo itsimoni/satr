@@ -9,7 +9,7 @@
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					username: "CryptoNetic",
+					username: "cryptopilotbot",
 					amount: amountUsd,
 					fields: ["Email", "Name"],
 					redirect: "http://localhost:3000",

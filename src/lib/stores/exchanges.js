@@ -12,7 +12,6 @@ export const exchanges = [
 	'Kraken',
 	'Bitfinex',
 	'Coinbase',
-	'Bittrex',
 	'Bithumb',
 	'Bitstamp',
 	'Bibox',

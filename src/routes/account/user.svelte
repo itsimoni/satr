@@ -17,6 +17,7 @@
 	import { countryList } from "$lib/stores/countryDataset";
 	import supabase from "$lib/db";
 	import { onMount } from "svelte";
+	import Footer from "$lib/components/Footer.svelte";
 
 	let userCreationDate = "";
 	async function getUserCreationDate() {
@@ -285,6 +286,7 @@
 		</div>
 	</form>
 </div>
+<Footer></Footer>
 
 <style>
 	.countriesThemed {

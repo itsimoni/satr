@@ -24,10 +24,8 @@
 	let CONTAINER_ID = "";
 
 	onMount(() => {
-		CONTAINER_ID =
-			options && options.container_id
-				? options.container_id
-				: "svelte-tradingview-widget;";
+		CONTAINER_ID = options && options.container_id ? options.container_id : "svelte-tradingview-widget";
+
 		appendScript(initWidget);
 	});
 

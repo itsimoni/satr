@@ -2,13 +2,14 @@
 	import { fade } from "svelte/transition";
 	import PartnersGrid from "$lib/components/arbitrage/PartnersGrid.svelte";
 	import ArbitrageGrid from "$lib/components/arbitrage/ArbitrageGrid.svelte";
-	import { companyName, current, invested, live, userVisibleComment } from "$lib/stores/store";
+	import { companyName, current, invested, live, userVisibleComment, userAdvert } from "$lib/stores/store";
 	import Modal from "$lib/components/Modal.svelte";
 	import { t, locale, locales } from "$lib/services/i18n";
 	import Particles from "svelte-particles";
 	import { loadFull } from "tsparticles";
 	import { nav } from "$lib/stores/nav";
 	import { goto } from "$app/navigation";
+	import Footer from "$lib/components/Footer.svelte";
 	import {
 		calculateDailyPerc,
 		calculateDailyPercentage,
@@ -20,6 +21,51 @@
 	} from "$lib/logic/arbitrageLogic";
 	import { Svrollbar } from "svrollbar";
 	import { onMount } from "svelte";
+
+
+	import image1 from './rek.png';
+  import image2 from './rek2.png';
+  import image3 from './rek3.png';
+  import image4 from './rek4.png';
+  import image5 from './rek5.png';
+  import image6 from './rek6.png';
+  import image7 from './rek7.png';
+  import image8 from './rek8.png';
+  import image9 from './rek9.png';
+  import image10 from './rek10.png';
+  import image11 from './rek11.png';
+  import image12 from './rek12.png';
+  import image13 from './rek13.png';
+  import image14 from './rek14.png';
+
+	 const adImages = {
+        1: image1,
+        2: image2,
+        3: image3,
+        4: image4,
+        5: image5,
+        6: image6,
+        7: image7,
+        8: image8,
+        9: image9,
+        10: image10,
+        11: image11,
+        12: image12,
+        14: image14,
+        // Add more mappings as needed
+    };
+
+ let adImageSrc;
+
+
+  $: if ($userAdvert in adImages) {
+        adImageSrc = adImages[$userAdvert];
+    } else {
+        adImageSrc = null;
+    }
+
+    $: showAdModal = adImageSrc !== null;
+
 
 	let particlesConfig = {
 		particles: {
@@ -145,6 +191,15 @@
 		profitArbitrage = parseFloat(profitArbitrage);
 	}
 
+let showAdModal = false;
+
+$: showAdModal = $userAdvert;
+    
+    function toggleAdModal() {
+        showAdModal = !showAdModal;
+    }
+
+
 	$: $invested, updateProfit();
 
 	$: $invested, updateMargin($invested);
@@ -160,6 +215,9 @@
 	onMount(async () => userPerc = await updatePerc())
 	let userPerc: any = undefined;
 	$: $invested, updatePerc()
+
+
+	
 </script>
 
 <div class="text-center font-inter text-white">
@@ -177,11 +235,22 @@
 
 <title>Crypto Bot - {$companyName}</title>
 
+{#if showAdModal}
+    <div class="modal">
+        <div class="modal-content">
+            <button class="close-button" on:click={toggleAdModal}>X</button>
+            <img src={adImageSrc} alt="Advertisement" />
+        </div>
+    </div>
+{/if}
+
+
 <svelte:window bind:innerWidth />
 <div class=" h-full min-h-screen w-full bg-mainbg font-inter text-white">
 	<div
 		class="topoBg relative flex w-full flex-col items-center py-16 text-center sm:bg-none lg:bg-mainbg"
 	>
+	
 		{#if ready}
 			<div
 				class="h-full w-full transition-all delay-300"
@@ -302,12 +371,16 @@
 			{$t("cbExplanation")}
 			<span class="font-semibold">{$t("cbExplanationBold")}</span>
 		</p>
+		<p>
+			{$t("cbPerkExplanation")}
+			<span class="font-semibold">{$t("cbPerExplanationBold")}</span>
+		</p>
 		<!-- svelte-ignore a11y-invalid-attribute -->
 		<PartnersGrid />
 		<div
 			class="mt-24 flex w-full justify-between border border-borderColor p-2 px-2 text-sm lg:px-4"
 		>
-			<p class="inline-block text-left opacity-50">{$companyName} ©2022</p>
+			<p class="inline-block text-left opacity-50">{$companyName} ©2023</p>
 			<p class="inline-block text-right">
 				{$t('financialDataDisclaimer')}
 			</p>
@@ -321,7 +394,7 @@
 		</div>
 	</div>
 </div>
-
+<Footer></Footer>
 <style>
 	:global(#tsparticles) {
 		position: absolute;
@@ -330,4 +403,42 @@
 		height: 100%;
 		background-color: #131722;
 	}
+
+   .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Dimmed background */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000; /* Ensure it's on top of other elements */
+    }
+    .modal-content {
+        width: 60%; /* Set the width of the modal */
+        max-width: 1000px; /* Maximum width */
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add some shadow for better visibility */
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center; /* Center content horizontally */
+    }
+    .close-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        border: none;
+        background: none;
+        font-size: 20px;
+        cursor: pointer;
+    }
+    img {
+        max-width: 100%; /* Ensure the image fits in the modal */
+        height: auto; /* Maintain aspect ratio */
+    }
 </style>

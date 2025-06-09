@@ -25,7 +25,7 @@
 	let options = [
 		{
 			title: "Cryptocurrencies",
-			subtitle: $t("wdBankText"),
+			subtitle: $t("wdCryptoText1"),
 			selected: false,
 		},
 		{

@@ -59,7 +59,7 @@
 			</div>
 		{/if}
 	</div>
-	<a href="https://www.cryptonetic.co.uk/" class="" rel="external"
+	<a href="https://www.satoshielitebot.us" class="" rel="external"
 		><svg
 			xmlns="http://www.w3.org/2000/svg"
 			class="h-4"

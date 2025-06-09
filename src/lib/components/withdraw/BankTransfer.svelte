@@ -198,7 +198,7 @@
 							bind:value={amountEur}
 							required
 							placeholder="EUR"
-							max="100000"
+							max="500000"
 							min="0"
 							name="Amount"
 							type="number"

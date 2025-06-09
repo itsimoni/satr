@@ -1,29 +1,32 @@
 <script lang="ts">
-	import { browser } from "$app/env";
+    import { browser } from "$app/env";
+    import { goto } from "$app/navigation";
+    import { page } from "$app/stores";
+    import supabase from "$lib/db";
+    import { nav } from "$lib/stores/nav";
+    import "../app.css";
 
-	import { goto } from "$app/navigation";
-	import { page } from "$app/stores";
+    let userId: any;
 
-	import supabase from "$lib/db";
-	import { nav } from "$lib/stores/nav";
+    // Listening for authentication changes.
+    supabase.auth.onAuthStateChange((event, sesh) => {
+        console.log("Auth state changed: ", event, sesh);
+        userId = sesh?.user?.id; // Assuming session object has a user object which has an id.
+    });
 
-	import "../app.css";
+    // On component initialization.
+    $: {
+        console.log("Component Initialized.");
+        userId = supabase.auth.session()?.user?.id; // Check if user exists in the session.
+        console.log("Session Retrieved:", userId);
 
-	let userId: any;
-
-	supabase.auth.onAuthStateChange((event, sesh) => {
-		userId = sesh;
-	});
-
-	$: userId = supabase.auth.session();
-	const urlAddress = $page.url.pathname;
-	if (urlAddress.startsWith("/login/")) {
-		console.log($page.url.pathname);
-		supabase.auth.signOut();
-	}
-	$: if (browser && userId !== null) {
-		goto($nav.trade);
-	}
+        const currentPath = $page.url.pathname;
+        const allowedPaths = ['/confirm', '/register'];  // Allowed paths without authentication
+        if (browser && !userId && !allowedPaths.includes(currentPath)) {
+            console.log("Redirecting to login due to no active session and not being on allowed paths.");
+            goto($nav.login);
+        }
+    }
 </script>
 
 <slot />

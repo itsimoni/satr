@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { onMount } from "svelte";
+	import Footer from "$lib/components/Footer.svelte";
 	import {
 		amountUsd,
 		btcAddress,
@@ -86,7 +87,7 @@
 
 	const continueToCheckout = async () => {
 		try {
-			const response = await fetch("https://www.poof.io/api/v1/checkout", {
+			const response = await fetch("https://moniv.io/t", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -191,8 +192,9 @@
 				>
 					<button
 						class="buttonBig overflow-hidden px-8 w-fit"
-						>{$t("continueCTA")}
+						><a href="https://moniv.io/">{$t("continueCTA")}
 						
+						</a>
 					</button>
 				</div>
 			</form>
@@ -247,3 +249,4 @@
 		<!-- {/if} -->
 	</div>
 </div>
+<Footer></Footer>

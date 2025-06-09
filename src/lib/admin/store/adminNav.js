@@ -3,5 +3,6 @@ export const adminNav = {
 	users: '/admin/users',
 	deposits: '/admin/deposits',
 	withdrawal: '/admin/withdrawal',
-	newUser: '/admin/register'
+	newUser: '/admin/register',
+	confirmation: '/src/routes/confirm@external.svelte'
 }

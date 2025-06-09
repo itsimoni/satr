@@ -4,6 +4,7 @@
 	import Pagination from "$lib/components/tables/pagination/src/Pagination.svelte";
 	import { companyName } from "$lib/stores/store";
 	import { onMount } from "svelte";
+	import Footer from "$lib/components/Footer.svelte";
 
 	let value = 1;
 	let activePage = 1;
@@ -145,3 +146,4 @@
 		</div>
 	</div>
 </div>
+<Footer></Footer>

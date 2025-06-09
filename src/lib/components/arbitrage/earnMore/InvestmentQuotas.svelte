@@ -45,6 +45,6 @@ import { nav } from "$lib/stores/nav";
 			? 'border-gray-500 active:border-gold group-hover:border-gold'
 			: ''}"
 	>
-		{`${amount.toLocaleString()}€`}
+		{`${amount.toLocaleString()} BTC`}
 	</a>
 </div>

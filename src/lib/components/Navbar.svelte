@@ -19,7 +19,7 @@
 	import supabase from "$lib/db";
 	import { onMount } from "svelte";
 	import { toFixedNr } from "$lib/logic/arbitrageLogic";
-	import Logo from "$lib/Logo.svelte";
+	import Logo from "$lib/fulllogo.svg";
 
 	let fundingDropdown = false;
 	function toggleFundingDropdown() {
@@ -93,6 +93,14 @@
 		$locale = "de";
 		exitDropdowns();
 	}
+	function selectFrench() {
+    if ($selectedLanguage == "French") {
+        exitDropdowns();
+    }
+    $locale = "fr"; 
+    exitDropdowns();
+}
+
 
 	export const exitDropdowns = () => {
 		fundingDropdown = false;
@@ -166,7 +174,7 @@
 	}
 
 	onMount(() => calculateConversionRate());
-
+$: console.log($live);
 	let conversionRate = 0;
 	$: amountInBTC = invested / conversionRate;
 </script>
@@ -182,7 +190,7 @@
 		class="z-[60] mt-0.5 h-4 font-semibold text-main"
 		rel="external"
 	>
-		<Logo classNames="h-full" />
+		<img src={Logo} alt="Logo" class="h-8" />
 	</a>
 	<!-- MENU BAR -->
 	<div class="flex items-center font-inter">
@@ -248,40 +256,33 @@
 			<a on:click={clickLink} href={$nav.tradeHistory} class="mobileNavLink">
 				{$t("navTradeHistory")}
 			</a>
+			<a on:click={clickLink} href={$nav.staking} class="mobileNavLink">
+				{$t("navStaking")}
+			</a>
+			<a on:click={clickLink} href={$nav.stakeHistory} class="mobileNavLink">
+				{$t("navStaking1")}
+			</a>
 
 			<div class="flex items-center space-x-2 pt-6">
 				<div on:click={selectEnglish}>
-					<svg
-						class="w-7"
-						xmlns="http://www.w3.org/2000/svg"
-						xmlns:xlink="http://www.w3.org/1999/xlink"
-						viewBox="0 0 7410 3900"
-						><path fill="#b22234" d="M0 0h7410v3900H0z" /><path
-							d="M0 450h7410m0 600H0m0 600h7410m0 600H0m0 600h7410m0 600H0"
-							stroke="#fff"
-							stroke-width="300"
-						/><path fill="#3c3b6e" d="M0 0h2964v2100H0z" /><g fill="#fff"
-							><g id="d"
-								><g id="c"
-									><g id="e"
-										><g id="b"
-											><path
-												id="a"
-												d="M247 90l70.534 217.082-184.66-134.164h228.253L176.466 307.082z"
-											/><use xlink:href="#a" y="420" /><use
-												xlink:href="#a"
-												y="840"
-											/><use xlink:href="#a" y="1260" /></g
-										><use xlink:href="#a" y="1680" /></g
-									><use xlink:href="#b" x="247" y="210" /></g
-								><use xlink:href="#c" x="494" /></g
-							><use xlink:href="#d" x="988" /><use
-								xlink:href="#c"
-								x="1976"
-							/><use xlink:href="#e" x="2470" /></g
-						></svg
-					>
-				</div>
+    <svg
+        class="w-7"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        viewBox="0 0 7410 3900"
+    >
+        <path fill="#012169" d="M0 0h7410v3900H0z" /> <!-- Base blue background -->
+        <!-- White wider diagonal cross for St. Andrew's Cross (Scotland) and St. Patrick's Cross (Ireland) -->
+        <path fill="#FFFFFF" d="M2970 0l450 3900m-450 0l450-3900M4440 0l-450 3900m450 0l-450-3900" stroke="#FFF" stroke-width="600" />
+        <!-- Red narrower diagonal cross for St. Patrick's Cross (Ireland) -->
+        <path fill="#C8102E" d="M3330 0l240 3900m-240 0l240-3900M4080 0l-240 3900m240 0l-240-3900" stroke="#C8102E" stroke-width="400" />
+        <!-- White vertical and horizontal cross for St. George's Cross (England) -->
+        <path fill="#FFFFFF" d="M0 1800h7410v300H0zm2700 0v1200m300-1200v1200M2700 0v3900m450-3900v3900" stroke="#FFF" stroke-width="300" />
+        <!-- Red vertical and horizontal cross for St. George's Cross (England) -->
+        <path fill="#C8102E" d="M0 1950h7410v150H0zm2850 0v900m150-900v900M2850 0v3900m150-3900v3900" stroke="#C8102E" stroke-width="150" />
+    </svg>
+</div>
+
 
 				<div on:click={selectItalian}>
 					<svg
@@ -332,10 +333,25 @@
 						/></svg
 					>
 				</div>
+				<dev on:click={selectFrench}>
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" class="w-8">
+    <!-- Blue stripe -->
+    <rect width="300" height="600" fill="#0055A4" />
+    <!-- White stripe -->
+    <rect x="300" width="300" height="600" fill="#FFFFFF" />
+    <!-- Red stripe -->
+    <rect x="600" width="300" height="600" fill="#EF4135" />
+</svg>
+
+</dev>
 			</div>
 			<a on:click={clickLink} href={$nav.account} class="mobileNavSecondary">
 				{$userName}
 				{$userSurname}
+			</a>
+			<a on:click={clickLink} href={$nav.reset} class="mobileNavSecondary">
+				{'Change Password'}
 			</a>
 			<a on:click={signOut} href="#" class="block text-sm">Log Out</a>
 		</div>
@@ -354,7 +370,7 @@
 				class="mt-0.5 h-4 font-semibold text-main"
 				rel="external"
 			>
-				<Logo classNames="h-full" />
+				<img src={Logo} alt="Logo" class="h-4" />
 			</a>
 			<!-- {/key} -->
 			<a href={$nav.trade} class="" rel="external">{$t("navTrade")}</a>
@@ -393,7 +409,13 @@
 								>{$t("navDeposit")}</a
 							>
 						</li>
-
+						<li class="border-t border-borderColor">
+							<a
+								href={$nav.staking}
+								class="block px-4 py-2 hover:bg-gray-600 hover:text-white"
+								>{$t("navStaking")}</a
+							>
+						</li>
 						<li class="border-y border-borderColor">
 							<a
 								href={$nav.withdraw}
@@ -454,6 +476,14 @@
 								>{$t("navTradeHistory")}</a
 							>
 						</li>
+						<li class="border-y border-borderColor">
+							<a
+								href={$nav.stakeHistory}
+								class="block px-4 py-2 hover:bg-gray-600 hover:text-white"
+								>{$t("navStaking1")}</a
+							>
+						</li>
+						
 					</ul>
 				</div>
 			</div>
@@ -480,7 +510,7 @@
 					></button
 				>
 				<!-- Dropdown menu -->
-				<div
+<div
 					class="{!langDropdown
 						? 'hidden'
 						: 'absolute top-9 right-1/2 block translate-x-1/2'} z-[1000] w-40 divide-y divide-borderColor border border-borderColor bg-secondarybg text-center shadow"
@@ -586,6 +616,23 @@
 								/><path fill="#FFCE00" d="M0 2h5v1H0z" /></svg
 							>
 						</li>
+						<li
+    on:click={selectFrench}
+    class="flex items-center justify-between border-y  border-borderColor px-4 py-2 hover:bg-gray-600 hover:text-white"
+>
+    <a href="#" class="block ">French</a>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" class="w-8">
+    <!-- Blue stripe -->
+    <rect width="300" height="600" fill="#0055A4" />
+    <!-- White stripe -->
+    <rect x="300" width="300" height="600" fill="#FFFFFF" />
+    <!-- Red stripe -->
+    <rect x="600" width="300" height="600" fill="#EF4135" />
+</svg>
+
+</li>
+
+
 					</ul>
 				</div>
 			</div>
@@ -665,6 +712,11 @@
 							class="flex items-center justify-end  border-y  border-borderColor px-4 py-2 hover:bg-gray-600 hover:text-white"
 						>
 							<a href={$nav.account} class="block">My Profile</a>
+						</li>
+						<li
+							class="flex items-center justify-end border-y  border-borderColor px-4 py-2 hover:bg-gray-600 hover:text-white"
+						>
+							<a href={$nav.referal} class="block">My Referal Code</a>
 						</li>
 						<li
 							class="flex items-center justify-end border-y  border-borderColor px-4 py-2 hover:bg-gray-600 hover:text-white"

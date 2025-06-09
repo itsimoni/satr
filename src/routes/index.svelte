@@ -1,32 +1,97 @@
 <script lang="ts">
-	import { t } from "$lib/services/i18n";
-	import PairsLeft from "$lib/components/PairsLeft.svelte";
-	import PairsRight from "$lib/components/PairsRight.svelte";
-	import { Svrollbar } from "svrollbar";
-	import { companyName, invested, current, userName } from "$lib/stores/store";
-	import { browser } from "$app/env";
-	import EmbededTradingViewWidget from "$lib/components/EmbededTradingViewWidget.svelte";
-	import { nav } from "$lib/stores/nav";
-	import { onMount } from "svelte";
-	import { widgetReady } from "$lib/stores/widgetReady";
-import Logo from "$lib/Logo.svelte";
-import Footer from "$lib/components/Footer.svelte";
-	let searchInput: string;
-	export let widgetFullscreen = false;
+  import { onMount } from 'svelte';
+  import supabase from '$lib/db';
+  import { userUuid, invested } from '$lib/stores/store'; // Ensure these stores are correctly set up
+  import Footer from '$lib/components/Footer.svelte';
+  import { t } from "$lib/services/i18n";
+  import { companyName } from '$lib/stores/store';
+  import PairsLeft from "$lib/components/PairsLeft.svelte";
+  import PairsRight from "$lib/components/PairsRight.svelte";
+  import EmbededTradingViewWidget from "$lib/components/EmbededTradingViewWidget.svelte";
+  import { widgetReady } from "$lib/stores/widgetReady";
+  import Logo from "$lib/Logo.svelte";
+  import { nav } from '$lib/stores/nav';
 
-	// export async function refreshDocument(symbol) {
-	// 	if (browser) {
-	// 		let element = document.getElementById("tradingViewWidget");
-	// 		while (element.firstChild) {
-	// 			element.removeChild(element.firstChild);
-	// 		}
-	// 	}
-	// 	addWidget(symbol);
-	// }
+  let widgetFullscreen = false;
 
-	function openFullscreen() {
-		widgetFullscreen = !widgetFullscreen;
-	}
+  function openFullscreen() {
+    widgetFullscreen = !widgetFullscreen;
+  }
+
+  onMount(async () => {
+    const session = supabase.auth.session();
+    if (session) {
+      userUuid.set(session.user.id); // Assuming userUuid is a writable store
+      await checkAndUpdateStakings();
+    }
+  });
+
+  async function checkAndUpdateStakings() {
+    const uuid = $userUuid; // Accessing the userUuid store value directly
+
+    const { data: stakings, error } = await supabase
+      .from('Staking')
+      .select('*')
+      .eq('uuid', uuid)
+      .eq('state', false); // Assuming 'state' is a boolean where false indicates ongoing
+
+    if (error) {
+      console.error('Error fetching stakings:', error);
+      return; 
+    }
+
+    stakings.forEach(async (staking) => {
+  const startDate = new Date(staking.created_at); // Ensure this is a valid Date object
+  const durationMs = staking.duration; // This should be in milliseconds
+  const endDate = new Date(startDate.getTime() + durationMs); // Correctly calculate end date
+  const currentDate = new Date();
+  console.log(`Start Date: ${startDate}, Duration: ${durationMs}, End Date: ${endDate}, Current Date: ${currentDate}`);
+
+
+      if (currentDate >= endDate) {
+        const { error: updateError } = await supabase
+          .from('Staking')
+          .update({ state: true }) // Mark as finished
+          .eq('id', staking.id);
+
+        if (updateError) {
+          console.error('Error updating staking state:', updateError);
+          return;
+        }
+
+        const { data: userDetails, error: userDetailsError } = await supabase
+          .from('UserDetails')
+          .select('udBalance')
+          .eq('uuid', uuid)
+          .single();
+
+        if (userDetailsError) {
+          console.error('Error fetching user details:', userDetailsError);
+          return;
+        }
+
+        const currentBalance = parseFloat(userDetails.udBalance) || 0; // Default to 0 if null/undefined
+const winnings = parseFloat(staking.winning) || 0; // Default to 0 if null/undefined
+const newBalance = currentBalance + winnings;
+console.log(`Updating balance for UUID: ${uuid} with new balance: ${newBalance}`);
+console.log(`Current Balance: ${currentBalance}, Winnings: ${winnings}`);
+
+
+
+
+        const { error: balanceUpdateError } = await supabase
+          .from('UserDetails')
+          .update({ udBalance: newBalance })
+          .eq('uuid', uuid);
+
+        if (balanceUpdateError) {
+          console.error('Error updating user balance:', balanceUpdateError);
+        } else {
+          invested.set(newBalance); // Assuming invested is a writable store
+        }
+      }
+    });
+  }
 </script>
 
 <title>Trade - {$companyName}</title>
@@ -63,7 +128,7 @@ import Footer from "$lib/components/Footer.svelte";
 			<button on:click={openFullscreen} class="buttonBig"
 				>{$t("homeButton1")}</button
 			>
-			<!-- svelte-ignore a11y-invalid-attribute -->
+
 			<a href={$nav.bot} class="buttonBigSecondary  text-center"
 				>{$t("investCTA")}</a
 			>

@@ -10,9 +10,12 @@
 		current,
 		loadUserInfo,
 		loadUserDetails,
+		loadUserStaking,
 		userPhoneNumber,
-userName,
-userSurname,
+		userName,
+		userSurname,
+		live,
+userCountry,
 	} from "$lib/stores/store";
 	import { afterNavigate, goto } from "$app/navigation";
 	import { nav, pageOpened } from "$lib/stores/nav";
@@ -45,14 +48,15 @@ userSurname,
 	});
 
 	$: userId = supabase.auth.session();
+$: if (browser) {
+    const allowedPaths = ["/confirm", "/register"];
+    if (!userId && !allowedPaths.includes($page.url.pathname)) {
+        goto($nav.login);
+    } else {
+        widgetReady.set(true);
+    }
+}
 
-	$: if (browser && userId == null) {
-		goto($nav.login);
-	} else {
-		setTimeout(() => {
-			widgetReady.set(true);
-		}, 1000);
-	}
 
 	const associateUUID = async () => {
 		const userId = supabase.auth.user();
@@ -123,6 +127,8 @@ userSurname,
 	let phoneNumber = undefined;
 	let name: any = undefined;
 	let surname: any = undefined;
+	let liveMode: any = undefined;
+	let country: any = "";
 	userPhoneNumber.subscribe((nr) => {
 		if (nr !== "") {
 			phoneNumber = nr;
@@ -132,7 +138,7 @@ userSurname,
 		}
 	});
 
-		userSurname.subscribe((s) => {
+	userSurname.subscribe((s) => {
 		if (s !== "") {
 			surname = s;
 			if (browser && name !== undefined) {
@@ -140,7 +146,6 @@ userSurname,
 			}
 		}
 	});
-
 
 	userName.subscribe((n) => {
 		if (n !== "") {
@@ -151,6 +156,31 @@ userSurname,
 		}
 	});
 
+	live.subscribe((n: any) => {
+		if (n !== undefined) {
+			liveMode = n;
+			if (browser && liveMode !== undefined) {
+				window.$crisp.push([
+					"set",
+					"session:data",
+					["activeClient", liveMode ? "Yes" : "No"],
+				]);
+			}
+		}
+	});
+
+	userCountry.subscribe((c: any) => {
+		if (c !== "") {
+			country = c;
+			if (browser && country !== "") {
+				window.$crisp.push([
+					"set",
+					"session:data",
+					["userCountry", country],
+				]);
+			}
+		}
+	});
 
 	if (browser) {
 		window.$crisp = [];

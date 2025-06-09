@@ -13,9 +13,7 @@
 	"devDependencies": {
 		"@fouita/pagination": "^0.0.2",
 		"@supabase/supabase-js": "^1.35.4",
-		"@sveltejs/adapter-auto": "next",
 		"@sveltejs/kit": "1.0.0-next.348",
-		"@svicons/crypto": "^0.1.11",
 		"@tailwindcss/forms": "^0.5.2",
 		"@tailwindcss/typography": "^0.5.2",
 		"autoprefixer": "^10.4.7",
@@ -34,6 +32,7 @@
 	"type": "module",
 	"dependencies": {
 		"@sveltejs/adapter-vercel": "^1.0.0-next.63",
+		"chart.js": "^4.3.0",
 		"cryptocurrency-icons": "^0.18.0",
 		"pnpm": "^7.2.1",
 		"seeded-rand": "^2.0.1",

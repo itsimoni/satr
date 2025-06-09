@@ -30,7 +30,7 @@
 
 	let conversionRate: number = 1;
 	let conversionRateEth: number = 1;
-	let minWithdraw: number = 50;
+	let minWithdraw: number = 40;
 	let maxWithdraw: number;
 	let minWithdrawBTC: number;
 	let maxWithdrawBTC: number;

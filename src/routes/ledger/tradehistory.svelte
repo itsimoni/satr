@@ -4,6 +4,7 @@
 	import Pagination from "$lib/components/tables/pagination/src/Pagination.svelte";
 	import { companyName } from "$lib/stores/store";
 	import { onMount } from "svelte";
+	import Footer from "$lib/components/Footer.svelte";
 
 	function convertMSToDate(time: number) {
 		let date = new Date(time).toDateString();
@@ -148,3 +149,4 @@
 		</div>
 	</div>
 </div>
+<Footer></Footer>

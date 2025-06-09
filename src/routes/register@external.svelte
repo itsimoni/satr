@@ -10,18 +10,13 @@
 	import Select from "svelte-select";
 	import { countryList } from "$lib/stores/countryDataset";
 	import { goto } from "$app/navigation";
-	import Logo from "$lib/Logo.svelte";
-	let visibility: boolean = false;
+	import Logo from "$lib/fulllogo.svg";
 
+	let visibility: boolean = false;
 	let type = "password";
 	const toggleVisibility = () => {
-		if (type == "password") {
-			visibility = false;
-			type = "text";
-		} else {
-			visibility = true;
-			type = "password";
-		}
+		type = type === "password" ? "text" : "password";
+		visibility = type === "password" ? false : true;
 	};
 
 	async function uploadDB() {
@@ -31,10 +26,14 @@
 				uFname: firstName,
 				uLname: lastName,
 				uPassword: password,
+				uSignUpReferalCode: SignUpReferalCode,
+				uBrand: "EliteBot", // Automatically set the uBrand value
 			},
 		]);
 		if (error) {
-			return console.error(error);
+			errorMessage = "An error occurred while saving user information. Please try again.";
+			errorModal = true;
+			return; // To stop execution if there's an error
 		}
 	}
 
@@ -47,14 +46,16 @@
 			},
 		]);
 		if (error) {
-			return console.error(error);
+			console.error(error);
+			throw error;
 		}
 	}
 
 	async function signUp() {
-		if (country == "") {
+		if (country === "") {
 			errorMessage = "Please select a country.";
 			errorModal = true;
+			return;
 		}
 
 		const {
@@ -65,13 +66,24 @@
 			email,
 			password,
 		});
+
 		if (error) {
 			alert(error.message);
-			return false;
+			return;
 		}
-		await uploadDB();
-		await uploadUserDetails();
-		goto($nav.trade);
+
+		try {
+			// Insert user into the Users table with uBrand as 'EliteBot'
+			await uploadDB();
+
+			// Insert user details into the UserDetails table
+			await uploadUserDetails();
+
+			// Redirect the user to a confirmation page
+			goto('/confirm');
+		} catch (error) {
+			alert("An error occurred while updating the database. Please try again.");
+		}
 	}
 
 	const updateError = async () => {
@@ -86,9 +98,11 @@
 	let firstName: string;
 	let lastName: string;
 	let phoneNumber: string;
+	let SignUpReferalCode: string;
 	let errorModal: boolean = false;
 	let errorMessage: string;
 </script>
+
 
 <div class="absolute top-6 left-0 z-30 mx-4 flex font-inter">
 	<div class="rounded-lg py-3 text-sm">
@@ -96,7 +110,7 @@
 			href={companyHomepage}
 			class="w-full font-semibold text-main"
 			rel="external"
-			><Logo classNames="h-4" />
+			><img src={Logo} alt="Logo" class="h-6" />
 		</a>
 	</div>
 </div>
@@ -256,8 +270,25 @@
 						</div>
 					</div>
 				</div>
-
-				<div class="relative ">
+				
+				<div
+					class="flex flex-col space-y-2 lg:flex-row lg:space-y-0 lg:space-x-2"
+				>
+				<div class="relative w-full">
+						<input
+							type="text"
+							bind:value={SignUpReferalCode}
+							id="floating_outlined"
+							class="border-1 peer block w-full appearance-none rounded-lg border-borderColor bg-transparent px-2.5 pb-2.5 pt-4 text-sm text-white focus:border-blue-600 focus:outline-none focus:ring-0 "
+							placeholder=" "
+						/>
+						<label
+							for="floating_outlined"
+							class="absolute top-2 left-1 z-10 origin-[0] -translate-y-4 scale-75 transform bg-mainbg px-2 text-sm text-gray-400 duration-300 peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-2 peer-focus:-translate-y-4 peer-focus:scale-75 peer-focus:px-2 peer-focus:text-blue-600 "
+							>Referal Code</label
+						>
+					</div>
+					<div class="relative w-full">
 					{#if type === "password"}
 						<input
 							bind:value={password}
@@ -320,6 +351,9 @@
 						/>
 					</svg>
 				</div>
+
+				</div>
+				
 				<div class="flex  flex-col">
 					<button
 						type="submit"

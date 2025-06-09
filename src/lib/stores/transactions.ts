@@ -2,13 +2,7 @@ import supabase from "$lib/db";
 import { writable } from "svelte/store";
 
 export const trades = [
-	// {
-	// 	tId: "Solana",
-	// 	details: "Arbitrage - Asset: Solana",
-	// 	amount: 250,
-	// 	remainingBalance: 250,
-	// 	time: "16/06/22",
-	// },
+
 ];
 
 export let withdrawHistory = [
@@ -22,20 +16,7 @@ export let withdrawHistory = [
 ];
 
 export let transactions = [
-	// {
-	// 	tId: "Deposit",
-	// 	details: "Deposit via Ethereum",
-	// 	amount: 250,
-	// 	remainingBalance: 750,
-	// 	time: "16/06/22",
-	// },
-	// {
-	// 	tId: "Deposit",
-	// 	details: "Deposit via Ethereum",
-	// 	amount: 500,
-	// 	remainingBalance: 250,
-	// 	time: "16/06/22",
-	// },
+
 ];
 
 export const loadTrades = async () => {
@@ -143,16 +124,3 @@ export const loadWithdrawHistory = async () => {
 	return;
 };
 
-// withdraws = await loadWithdrawals(userId?.id);
-
-// async function pushTrades(data: any) {
-// 	for (let trade of data) {
-// 		trades.push({
-// 			tId: trade.tTransaction,
-// 			details: trade.tDetails,
-// 			amount: trade.tAmount,
-// 			remainingBalance: trade.tRemainingBalance,
-// 			time: trade.tDate,
-// 		});
-// 	}
-// }

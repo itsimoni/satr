@@ -1,36 +1,46 @@
 <script lang="ts">
-	let growthPerc = 2.3;
-	let growthPercMax = 2.5;
-	import PairsArbitrage from "$lib/components/arbitrage/PairsArbitrage.svelte";
-	import Radar from "$lib/components/arbitrage/Radar.svelte";
-	export let exchange: string = "",
-		exchange2: string = "",
-		value = 0,
-		value2 = 0;
-	import { t } from "$lib/services/i18n";
-import { companyWebsite } from "$lib/stores/store";
+    let growthPerc = 2.3;
+    let growthPercMax = 2.5;
+    import PairsArbitrage from "$lib/components/arbitrage/PairsArbitrage.svelte";
+    import Radar from "$lib/components/arbitrage/Radar.svelte";
+    export let exchange: string = "";
+    export let exchange2: string = "";
+    export let value = 0;
+    export let value2 = 0;
+    import { t } from "$lib/services/i18n";
 
-	export let symbol: any = "BTC";
+    export let symbol: string = "BTC"; // Ensuring symbol has a default value
 
-	let bids = [];
-	let asks = [];
+    let bids = [];
+    let asks = [];
 
-	async function getOrderBook() {
-		bids = [];
-		asks = [];
+		
 
-		const searchQuery = symbol + "EUR";
+    // Function to generate random order values
+    function getRandomOrderValue(min, max) {
+        return (Math.random() * (max - min) + min).toFixed(5);
+    }
 
-		const endpoint = `${companyWebsite}/orderBook?symbol=${searchQuery}`;
+    // Function to generate mock order book data
+    function generateMockOrderBook() {
+        bids = Array.from({ length: 10 }, () => ({
+            price: getRandomOrderValue(0.05068, 0.05077),
+            amount: getRandomOrderValue(1, 50)
+        }));
 
-		const response = await fetch(endpoint);
-		const data = await response.json();
+        asks = Array.from({ length: 10 }, () => ({
+            price: getRandomOrderValue(0.05078, 0.05087),
+            amount: getRandomOrderValue(1, 50)
+        }));
 
-		bids = await data.bids;
-		asks = await data.asks;
-	}
+        bids.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
+        asks.sort((a, b) => parseFloat(a.price) - parseFloat(b.price));
+    }
 
-	$: symbol, getOrderBook();
+    $: symbol, generateMockOrderBook();
+    generateMockOrderBook();
+
+		
 </script>
 
 <div
@@ -81,11 +91,11 @@ import { companyWebsite } from "$lib/stores/store";
 			<Radar />
 		</div>
 	</div>
-	<div class="lg:w-1/2">
-		{#key bids}
-			<PairsArbitrage {exchange} {exchange2} {bids} {asks} {symbol} />
-		{/key}
-	</div>
+	 <div class="lg:w-1/2">
+        {#key bids}
+            <PairsArbitrage {exchange} {exchange2} {bids} {asks} {symbol} />
+        {/key}
+    </div>
 	<div
 		class="absolute top-1/2 left-1/2 hidden h-[90%] w-[1px] -translate-x-1/2 -translate-y-1/2 bg-borderColor lg:block"
 	/>

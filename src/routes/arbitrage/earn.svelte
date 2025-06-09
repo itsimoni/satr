@@ -6,49 +6,43 @@
 
 	let investmentOptions = [
 		{
+			percMin: 0.2,
+			percMax: 0.5,
+			amount: 0.01,
+			offer: $t("emShrimp"),
+		},
+		{
+			percMin: 0.35,
+			percMax: 0.7,
+			amount: 0.1,
+			offer: $t("emCrab"),
+		},
+		{
 			percMin: 0.6,
-			percMax: 0.8,
-			amount: 250,
+			percMax: 1,
+			amount: 1,
+			offer: $t("emoctopus"),
 		},
 		{
 			percMin: 0.8,
-			percMax: 1,
-			amount: 500,
-		},
-		{
-			percMin: 1,
-			percMax: 1.1,
-			amount: 1000,
-		},
-		{
-			percMin: 1.1,
-			percMax: 1.2,
-			amount: 2500,
+			percMax: 1.3,
+			amount: 5,
+			offer: $t("emMembership"),
 		},
 		{
 			percMin: 1.2,
-			percMax: 1.3,
-			amount: 10000,
-		},
-		{
-			percMin: 1.3,
-			percMax: 1.4,
-			amount: 20000,
-		},
-		{
-			percMin: 1.4,
-			percMax: 1.5,
-			amount: 30000,
+			percMax: 2.6,
+			amount: 10,
 			highlighted: "popular",
 			offer: $t("emPopular"),
 		},
 		{
-			percMin: 1.5,
-			percMax: 1.6,
-			amount: 60000,
-			highlighted: "best",
+			percMin: 2.1,
+			percMax: 4.2,
+			amount: 50,
+			highlighted: "popular",
 			offer: $t("emBest"),
-		},
+		}, 
 	];
 </script>
 

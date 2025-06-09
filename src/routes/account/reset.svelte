@@ -6,6 +6,7 @@
 	import { nav } from "$lib/stores/nav";
 	import { companyName } from "$lib/stores/store";
 	import supabase from "$lib/db";
+	import Footer from "$lib/components/Footer.svelte";
 
 	// const { user: us } = get(session);
 
@@ -300,3 +301,4 @@
 		class="topoBg mt-12 flex w-full flex-col items-center justify-center bg-secondarybg py-14 md:mt-0 md:w-2/5"
 	/>
 </div>
+<Footer></Footer>

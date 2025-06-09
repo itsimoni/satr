@@ -32,44 +32,41 @@ if (userId) {
 let investedAmount = 0;
 
 export async function calculateDailyPerc(inv: number) {
-	// if (await percentages) {
-	const percentages = await getDailyArbitragePerc(inv);
-	if ((await percentages) !== undefined) {
-		const rnd = new Srand();
-		rnd.seed(utcDay);
-		const dailyPerc = rnd.inRange(percentages.percMin, percentages.percMax);
+  const percentages = await getDailyArbitragePerc(inv);
 
-		return calculateMargin(dailyPerc);
-	}
+  if (percentages !== undefined) {
+    const rnd = new Srand();
+    rnd.seed(utcDay);
+    const dailyPerc = rnd.inRange(percentages.percMin, percentages.percMax);
+
+    return calculateMargin(dailyPerc);
+  }
 }
+
 
 export async function calculateMargin(dailyPerc = 1.45) {
-	const currentDate = new Date().getTime();
-	const last12Am = new Date(new Date().setUTCHours(0, 0, 0, 0)).getTime();
+  const currentDate = new Date().getTime();
+  const last12Am = new Date(new Date().setUTCHours(0, 0, 0, 0)).getTime();
 
-	let timeFromToday: any;
+  let timeFromToday;
 
-	if (userCreationTime > last12Am) {
-		timeFromToday = (await currentDate) - (await userCreationTime);
-	}
+  if (userCreationTime > last12Am) {
+    timeFromToday = currentDate - userCreationTime;
+  }
 
-	if (userCreationTime < last12Am) {
-		timeFromToday = currentDate - last12Am;
-	}
+  if (userCreationTime < last12Am) {
+    timeFromToday = currentDate - last12Am;
+  }
 
-	if ((await timeFromToday) > 0) {
-		operationsAtCurrentTime = await toFixedNr(
-			(timeFromToday % daysInMS) / 120000
-		);
+  if (timeFromToday > 0) {
+    operationsAtCurrentTime = toFixedNr((timeFromToday % daysInMS) / 120000);
 
-		percFinished = await toFixedNr(
-			((await operationsAtCurrentTime) / operationsShouldBe) * 100,
-			2
-		);
+    percFinished = toFixedNr((operationsAtCurrentTime / operationsShouldBe) * 100, 2);
 
-		return toFixedNr((dailyPerc / 100) * percFinished, 3);
-	}
+    return toFixedNr((dailyPerc / 100) * percFinished, 3);
+  }
 }
+
 
 export function msToTime(duration: number) {
 	var seconds: any = Math.floor((duration / 1000) % 60),
@@ -84,51 +81,50 @@ export function msToTime(duration: number) {
 }
 
 export const getDailyArbitragePerc = async (amount: number) => {
-	let userDailyArbitragePerc = undefined;
-	let percMin: any, percMax: any;
-	const userId = supabase.auth.user();
-	const { data, error } = await supabase
-		.from("UserDetails")
-		.select("udCustomMaxBotWinning, udCustomMinBotWinning")
-		.eq("uuid", userId?.id)
-		.single();
-		
-	if (await data) {
-		if (
-			(await data.udCustomMaxBotWinning) !== null &&
-			(await data.udCustomMinBotWinning) !== null
-		) {
-			return {percMin: data.udCustomMinBotWinning, percMax: data.udCustomMaxBotWinning}
-		}
+  let percMin, percMax; // Define these variables
 
-	}
-	await calculateConversionRate();
-	if (conversionRate !== 0) {
-		const amountBtc = amount / conversionRate;
-		if (amountBtc < 250) {
-			percMin = 0.6;
-			percMax = 0.8;
-		}
-		investmentOptions.filter((investment) => {
-			if (amountBtc >= investment.amount) {
-				percMin = investment.percMin;
-				percMax = investment.percMax;
-			}
-		});
-	}
+  const userId = supabase.auth.user();
+  const { data, error } = await supabase
+    .from("UserDetails")
+    .select("udCustomMaxBotWinning, udCustomMinBotWinning, udBalance")
+    .eq("uuid", userId?.id)
+    .single();
 
-	if (percMin !== undefined && percMax !== undefined) {
-		return { percMin, percMax };
-	}
+  if (data) {
+    if (
+      data.udCustomMaxBotWinning !== null &&
+      data.udCustomMinBotWinning !== null
+    ) {
+      return { percMin: data.udCustomMinBotWinning, percMax: data.udCustomMaxBotWinning };
+    }
 
+    // Add a check for udBalance here
+    if (data.udBalance !== null && data.udBalance !== undefined) {
+      if (data.udBalance < 0.01) {
+        percMin = 0.2;
+        percMax = 0.5;
+      }
+      investmentOptions.filter((investment) => {
+        if (data.udBalance >= investment.amount) {
+          percMin = investment.percMin;
+          percMax = investment.percMax;
+        }
+      });
+    }
+  }
+
+  if (percMin !== undefined && percMax !== undefined) {
+    return { percMin, percMax };
+  }
 };
+
 
 export const calculateDailyPercentage = async (amountBTC: number) => {
 	let userDailyArbitragePerc = undefined;
 	const userId = supabase.auth.user();
 	const { data, error } = await supabase
 		.from("UserDetails")
-		.select("udCustomMaxBotWinning, udCustomMinBotWinning")
+		.select("udCustomMaxBotWinning, udCustomMinBotWinning, udBalance")
 		.eq("uuid", userId?.id)
 		.single();
 
@@ -149,15 +145,15 @@ export const calculateDailyPercentage = async (amountBTC: number) => {
 		) {
 			await calculateConversionRate();
 			if (conversionRate !== 0) {
-				if (amountBTC < 250) {
+				if (data && data.udBalance < 0.01) {
 					userDailyArbitragePerc = {
-						percMin: 0.6,
-						percMax: 0.8,
+						percMin: 0.2,
+						percMax: 0.5,
 					};
 					return userDailyArbitragePerc;
 				}
 				investmentOptions.filter((investment) => {
-					if (amountBTC >= investment.amount) {
+					if (data.udBalance >= investment.amount) {
 						userDailyArbitragePerc = {
 							percMin: investment.percMin,
 							percMax: investment.percMax,
@@ -175,7 +171,7 @@ export const calculateDailyMargin = async (amountBTC: number) => {
 	const userId = supabase.auth.user();
 	const { data, error } = await supabase
 		.from("UserDetails")
-		.select("udCustomMaxBotWinning, udCustomMinBotWinning")
+		.select("udCustomMaxBotWinning, udCustomMinBotWinning, udBalance")
 		.eq("uuid", userId?.id)
 		.single();
 
@@ -196,14 +192,14 @@ export const calculateDailyMargin = async (amountBTC: number) => {
 		) {
 			await calculateConversionRate();
 			if (conversionRate !== 0) {
-				if (amountBTC < 250) {
+				if (data && data.udBalance < 0.01) {
 					return {
-						percMin: 0.6,
-						percMax: 0.8,
+						percMin: 0.2,
+						percMax: 0.5,
 					};
 				}
 				investmentOptions.filter((investment) => {
-					if (amountBTC >= investment.amount) {
+					if (data.udBalance >= investment.amount) {
 						return {
 							percMin: investment.percMin,
 							percMax: investment.percMax,
@@ -217,45 +213,35 @@ export const calculateDailyMargin = async (amountBTC: number) => {
 
 let investmentOptions = [
 	{
-		percMin: 0.6,
-		percMax: 0.8,
-		amount: 250,
-	},
-	{
-		percMin: 0.8,
-		percMax: 1,
-		amount: 500,
-	},
-	{
-		percMin: 1,
-		percMax: 1.1,
-		amount: 1000,
-	},
-	{
-		percMin: 1.1,
-		percMax: 1.2,
-		amount: 2500,
-	},
-	{
-		percMin: 1.2,
-		percMax: 1.3,
-		amount: 10000,
-	},
-	{
-		percMin: 1.3,
-		percMax: 1.4,
-		amount: 20000,
-	},
-	{
-		percMin: 1.4,
-		percMax: 1.5,
-		amount: 30000,
-	},
-	{
-		percMin: 1.5,
-		percMax: 1.6,
-		amount: 60000,
-	},
+			percMin: 0.2,
+			percMax: 0.5,
+			amount: 0.01,	
+		},
+		{
+			percMin: 0.35,
+			percMax: 0.7,
+			amount: 0.1,
+		},
+		{
+			percMin: 0.6,
+			percMax: 1,
+			amount: 1,		
+		},
+		{
+			percMin: 0.8,
+			percMax: 1.3,
+			amount: 5,
+		},
+		{
+			percMin: 1.2,
+			percMax: 2.6,
+			amount: 10,
+		},
+		{
+			percMin: 2.1,
+			percMax: 4.2,
+			amount: 50,
+		},
 ];
 
 async function calculateConversionRate() {

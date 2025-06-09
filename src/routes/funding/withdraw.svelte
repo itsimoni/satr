@@ -7,6 +7,7 @@
 	import WithdrawFirst from "$lib/components/withdraw/WithdrawFirst.svelte";
 	import CreditCard from "$lib/components/withdraw/CreditCard.svelte";
 	import { mainPage } from "$lib/stores/withdraw/route";
+	import Footer from "$lib/components/Footer.svelte";
 	let routes = [
 		{ step: 1, component: Cryptocurrency },
 		{ step: 2, component: BankTransfer },
@@ -92,3 +93,4 @@
 		<svelte:component this={route} />
 	{/if}
 </div>
+<Footer></Footer>

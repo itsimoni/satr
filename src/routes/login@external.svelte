@@ -2,44 +2,46 @@
 	import { nav } from "$lib/stores/nav";
 	import supabase from "$lib/db";
 	import { goto } from "$app/navigation";
-	import { companyName, companyHomepage } from "$lib/stores/store";
-	import Logo from "$lib/Logo.svelte";
+		import { companyName, companyHomepage } from "$lib/stores/store";
+		import Logo from "$lib/fulllogo.svg";
 
 	let visibility: boolean = false;
-
 	let type = "password";
-	const toggleVisibility = () => {
-		if (type == "password") {
-			visibility = false;
-			type = "text";
-		} else {
-			visibility = true;
-			type = "password";
-		}
-	};
+	let email: string = '';
+	let password: string = '';
+	let error: string | null = null; // Store error messages for display
 
-	let email: string, password: string;
-	let error: boolean = false;
+	const toggleVisibility = () => {
+		type = type === "password" ? "text" : "password";
+		visibility = type === "password" ? false : true;
+	};
 
 	const signIn = async () => {
-		const {
-			user,
-			session: supabaseSession,
-			error,
-		} = await supabase.auth.signIn({
-			email,
-			password,
-		});
-		if (error) {
-			updateError();
-			return;
-		} else {
-			goto($nav.trade);
-		}
-	};
+		error = null; // Reset error
 
-	const updateError = () => {
-		error = !error;
+		// Step 1: Sign in with email and password
+		const { user, error: authError } = await supabase.auth.signIn({ email, password });
+		if (authError) {
+			error = "Invalid credentials. Please try again.";
+			return;
+		}
+
+		// Step 2: Query the Users table for the user's `uBrand`
+		const { data, error: queryError } = await supabase
+			.from("Users")
+			.select("uBrand")
+			.eq("uEmail", email) // Match by email
+			.single(); // Fetch a single row
+		
+		if (queryError || data?.uBrand !== "EliteBot") {
+			error = "Access denied. This account is not associated with EliteBot.";
+			// Optionally sign out the user if authenticated but not authorized
+			await supabase.auth.signOut();
+			return;
+		}
+
+		// Step 3: Redirect on success
+		goto($nav.trade);
 	};
 </script>
 
@@ -51,7 +53,7 @@
 			href={companyHomepage}
 			class="w-full font-semibold text-main"
 			rel="external"
-			><Logo classNames="h-4" />
+			><img src={Logo} alt="Logo" class="h-6" />
 		</a>
 	</div>
 </div>
@@ -110,7 +112,7 @@
 						<p class="inline-block  text-red-500">
 							<span class="font-semibold">Incorrect email or password.</span>
 							<a
-								href="mailto:support@bbepank.com"
+								href="mailto:support@satoshielitebot.us"
 								class="underline underline-offset-1">Contact support</a
 							> for more information.
 						</p>

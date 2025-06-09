@@ -245,7 +245,7 @@
 							bind:value={amountEur}
 							required
 							placeholder="EUR"
-							max="100000"
+							max="500000"
 							name="Amount"
 							type="number"
 							class="inputInitial {amountError ? 'inputError' : ''}"
