@@ -59,7 +59,7 @@
     class="h-10 w-10 flex justify-center items-center {rounded ? ' bg-mainbg border border-borderColor ' : ''}
     {current > 1 ? 'cursor-pointer text-gray-400' : ''}"
     on:click={() => current > 1 && setCurrent(current - 1)}>
-    <ChevronLeftIcon class="w-{s / 2} h-{s / 2}" />
+    <ChevronLeftIcon class="{small ? 'w-4 h-4' : 'w-6 h-6'}" />
   </div>
   <div
     class="flex h-10 {rounded ? ' bg-mainbg  border-borderColor border-y border-r text-gray-500' : ''}">
@@ -82,6 +82,6 @@
     class="h-10 w-10 flex justify-center items-center {rounded ? ' bg-mainbg  border-borderColor border-y border-r' : ''}
     {current < num_pages ? 'cursor-pointer text-gray-400' : ''}"
     on:click={() => current < num_pages && setCurrent(current + 1)}>
-    <ChevronRightIcon class="w-{s / 2} h-{s / 2}" />
+    <ChevronRightIcon class="{small ? 'w-4 h-4' : 'w-6 h-6'}" />
   </div>
 </div>
